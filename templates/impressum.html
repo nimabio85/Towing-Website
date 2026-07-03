@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Impressum - 24h Abschleppdienst Berlin{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="page-title">Impressum</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Startseite</a></li>
+                        <li class="breadcrumb-item active">Impressum</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Legal Content -->
+<section class="legal-content py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="legal-text">
+                    <h2>Angaben gemäß § 5 TMG</h2>
+                    <div class="company-info mb-4">
+                        <p><strong>{{ content.companyName or 'Abschleppdienst Berlin GmbH' }}</strong><br>
+                        {{ (content.address or 'Musterstraße 123\n12345 Berlin')|replace('\n', '<br>')|safe }}</p>
+                    </div>
+
+                    <h3>Vertreten durch:</h3>
+                    <p>Geschäftsführer: Michael Schmidt</p>
+
+                    <h3>Kontakt:</h3>
+                    <p>Telefon: {{ content.phoneNumber or '+49 30 123 456 789' }}<br>
+                    E-Mail: {{ content.email or 'info@abschleppdienst-berlin.de' }}</p>
+
+                    <h3>Registereintrag:</h3>
+                    <p>Eintragung im Handelsregister<br>
+                    Registergericht: Amtsgericht Berlin-Charlottenburg<br>
+                    Registernummer: HRB 123456</p>
+
+                    <h3>Umsatzsteuer-ID:</h3>
+                    <p>Umsatzsteuer-Identifikationsnummer gemäß §27a Umsatzsteuergesetz: DE123456789</p>
+
+                    <h3>Berufsbezeichnung und berufsrechtliche Regelungen:</h3>
+                    <p>Berufsbezeichnung: Kraftfahrzeuggewerbe<br>
+                    Zuständige Kammer: Handwerkskammer Berlin<br>
+                    Verliehen durch: Deutschland</p>
+
+                    <h3>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:</h3>
+                    <p>Michael Schmidt<br>
+                    {{ (content.address or 'Musterstraße 123\n12345 Berlin')|replace('\n', '<br>')|safe }}</p>
+
+                    <h2>Haftung für Inhalte</h2>
+                    <p>Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht unter der Verpflichtung, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.</p>
+
+                    <p>Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.</p>
+
+                    <h2>Haftung für Links</h2>
+                    <p>Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.</p>
+
+                    <p>Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.</p>
+
+                    <h2>Urheberrecht</h2>
+                    <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.</p>
+
+                    <p>Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.</p>
+
+                    <hr class="my-5">
+                    <p class="text-muted"><small>Stand: Dezember 2024</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

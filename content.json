@@ -1,0 +1,41 @@
+{
+  "address": "Musterstraße 123\n12345 Berlin",
+  "companyName": "Abschleppdienst Berlin",
+  "email": "info@abschleppdienst-berlin.de",
+  "headline": "24h Abschleppdienst in Berlin",
+  "phoneNumber": "+49 30 123 456 789",
+  "services": [
+    {
+      "description": "Schnelle Hilfe bei Autopannen. Unser erfahrenes Team ist 24/7 für Sie da und löst Ihr Problem direkt vor Ort.",
+      "icon": "fas fa-tools",
+      "id": 1,
+      "title": "Pannenhilfe"
+    },
+    {
+      "description": "Professionelle Bergung nach Unfällen. Wir kümmern uns um die sichere Bergung Ihres Fahrzeugs.",
+      "icon": "fas fa-car-crash",
+      "id": 2,
+      "title": "Unfallbergung"
+    },
+    {
+      "description": "Zuverlässiger Transport Ihres Fahrzeugs zur Werkstatt oder zum gewünschten Zielort.",
+      "icon": "fas fa-truck",
+      "id": 3,
+      "title": "Abschleppdienst"
+    },
+    {
+      "description": "Rechtssichere Entfernung von Falschparkern auf Ihrem Privatgelände oder Firmenparkplatz.",
+      "icon": "fas fa-car",
+      "id": 4,
+      "title": "Falschparker entfernen"
+    },
+    {
+      "description": "Schnelle Starthilfe bei leerer Batterie. Wir bringen Ihr Fahrzeug wieder zum Laufen.",
+      "icon": "fas fa-battery-half",
+      "id": 5,
+      "title": "Batterie-Starthilfe"
+    }
+  ],
+  "subheadline": "Schnell. Zuverlässig. Rund um die Uhr.",
+  "whatsappNumber": "+49 30 123 456 789"
+}

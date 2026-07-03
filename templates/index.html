@@ -1,0 +1,485 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+    .leaflet-popup-content-wrapper {
+        border-radius: 8px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+    .leaflet-popup-content {
+        font-family: 'Roboto', sans-serif;
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section d-flex align-items-center">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="hero-title">{{ content.headline or '24h Abschleppdienst in Berlin' }}</h1>
+                <p class="hero-subtitle">{{ content.subheadline or 'Schnell. Zuverlässig. Rund um die Uhr.' }}</p>
+                <div class="hero-buttons">
+                    <a href="tel:{{ content.phoneNumber or '+4930123456789' }}" class="btn btn-warning btn-lg me-2">
+                        <i class="fas fa-phone me-2"></i>Jetzt anrufen
+                    </a>
+                    <button class="btn btn-outline-light btn-lg" data-bs-toggle="modal" data-bs-target="#callbackModal">
+                        <i class="fas fa-phone-alt me-2"></i>Rückruf anfordern
+                    </button>
+                </div>
+                <div class="hero-features mt-4">
+                    <div class="row">
+                        <div class="col-md-4 mb-2">
+                            <i class="fas fa-clock text-warning me-2"></i><span>24/7 Service</span>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <i class="fas fa-map-marker-alt text-warning me-2"></i><span>Berlinweit</span>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <i class="fas fa-tachometer-alt text-warning me-2"></i><span>Schnell vor Ort</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image">
+                    {% if content.hero_image %}
+                        <img src="{{ url_for('static', filename=content.hero_image) }}"
+                             alt="Professioneller Abschleppdienst Berlin" class="img-fluid hero-photo">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='images/hero-tow-truck.jpg') }}"
+                             alt="Professioneller Abschleppdienst Berlin" class="img-fluid hero-photo">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="services-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Unsere Leistungen</h2>
+            <p class="section-subtitle">Professioneller Abschleppdienst für alle Fahrzeugtypen</p>
+        </div>
+        <div class="row g-4">
+            {% for service in content.services %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-card h-100">
+                        <div class="service-icon"><i class="{{ service.icon or 'fas fa-cog' }}"></i></div>
+                        <h4>{{ service.title }}</h4>
+                        <p>{{ service.description }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('leistungen') }}" class="btn btn-outline-primary btn-lg">
+                Alle Leistungen ansehen <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Price Calculator Section -->
+<section class="calculator-section py-5" style="background:#f0f5ff; border-top:1px solid #dde6f7; border-bottom:1px solid #dde6f7;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-5">
+                    <h2 class="section-title"><i class="fas fa-calculator me-2 text-primary"></i>Preisrechner</h2>
+                    <p class="section-subtitle">Berechnen Sie eine unverbindliche Preisschätzung für Ihren Einsatz direkt hier.</p>
+                </div>
+
+                <div class="calc-card shadow-sm border-0">
+                    <div class="calc-step mb-4">
+                        <div class="calc-step-label"><span class="calc-step-num">1</span> Welche Leistung benötigen Sie?</div>
+                        <div class="calc-options" id="homeServiceOptions">
+                            <label class="calc-option">
+                                <input type="radio" name="home-service" value="starthilfe" data-base="60" data-max="90">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-battery-half"></i>
+                                    <span>Starthilfe</span>
+                                </div>
+                            </label>
+                            <label class="calc-option">
+                                <input type="radio" name="home-service" value="pannenhilfe" data-base="80" data-max="130">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-tools"></i>
+                                    <span>Pannenhilfe</span>
+                                </div>
+                            </label>
+                            <label class="calc-option">
+                                <input type="radio" name="home-service" value="oeffnen" data-base="80" data-max="150">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-key"></i>
+                                    <span>Fahrzeug öffnen</span>
+                                </div>
+                            </label>
+                            <label class="calc-option">
+                                <input type="radio" name="home-service" value="abschleppen" data-base="110" data-max="180">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-truck"></i>
+                                    <span>Abschleppen</span>
+                                </div>
+                            </label>
+                            <label class="calc-option">
+                                <input type="radio" name="home-service" value="unfallbergung" data-base="160" data-max="320">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-car-crash"></i>
+                                    <span>Unfallbergung</span>
+                                </div>
+                            </label>
+                            <label class="calc-option">
+                                <input type="radio" name="home-service" value="falschparker" data-base="120" data-max="200">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-car"></i>
+                                    <span>Falschparker</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="calc-step mb-4">
+                        <div class="calc-step-label"><span class="calc-step-num">2</span> Ihr Standort</div>
+                        <div class="calc-options" id="homeZoneOptions">
+                            <label class="calc-option">
+                                <input type="radio" name="home-zone" value="innen" data-surcharge="0">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-building"></i>
+                                    <span>Innenstadt</span>
+                                    <small>Mitte, Kreuzberg, P.Berg…</small>
+                                </div>
+                            </label>
+                            <label class="calc-option">
+                                <input type="radio" name="home-zone" value="aussen" data-surcharge="25">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-map-marked-alt"></i>
+                                    <span>Außenbezirke</span>
+                                    <small>Spandau, Steglitz, Köpenick…</small>
+                                </div>
+                            </label>
+                            <label class="calc-option">
+                                <input type="radio" name="home-zone" value="umland" data-surcharge="50">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-road"></i>
+                                    <span>Umland</span>
+                                    <small>Potsdam, Oranienburg, Umland…</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="calc-step mb-4">
+                        <div class="calc-step-label"><span class="calc-step-num">3</span> Uhrzeit</div>
+                        <div class="calc-options" id="homeTimeOptions">
+                            <label class="calc-option">
+                                <input type="radio" name="home-time" value="day" data-surcharge="0">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-sun"></i>
+                                    <span>Tagsüber</span>
+                                    <small>06:00 – 22:00 Uhr</small>
+                                </div>
+                            </label>
+                            <label class="calc-option">
+                                <input type="radio" name="home-time" value="night" data-surcharge="20">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-moon"></i>
+                                    <span>Nachts / WE</span>
+                                    <small>22:00 – 06:00, Feiertage</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Result -->
+                    <div class="calc-result" id="homeCalcResult" style="display:none; transition: all 0.3s ease;">
+                        <div class="calc-result-inner">
+                            <div class="calc-result-label">Geschätzter Preis</div>
+                            <div class="calc-result-price" id="homeCalcPrice">—</div>
+                            <div class="calc-result-note mb-3">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Unverbindliche Schätzung inkl. MwSt. Der genaue Preis wird vor Ort festgelegt.
+                            </div>
+                            <div class="d-flex gap-2 justify-content-center flex-wrap">
+                                <a href="tel:{{ content.phoneNumber or '+4930123456789' }}" class="btn btn-warning btn-lg fw-bold text-dark">
+                                    <i class="fas fa-phone me-2"></i>Jetzt anrufen
+                                </a>
+                                <button class="btn btn-outline-light btn-lg" data-bs-toggle="modal" data-bs-target="#callbackModal">
+                                    <i class="fas fa-phone-alt me-2"></i>Rückruf anfordern
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="homeCalcHint" class="calc-hint">
+                        <i class="fas fa-arrow-up me-2"></i>Wählen Sie bitte alle drei Optionen oben aus.
+                    </div>
+                </div>
+
+                <div class="calc-info-row mt-4">
+                    <div class="calc-info-item">
+                        <i class="fas fa-check-circle text-success"></i>
+                        Keine Anfahrtskosten im Stadtgebiet
+                    </div>
+                    <div class="calc-info-item">
+                        <i class="fas fa-check-circle text-success"></i>
+                        Faire Preise — keine versteckten Gebühren
+                    </div>
+                    <div class="calc-info-item">
+                        <i class="fas fa-check-circle text-success"></i>
+                        Kostenvoranschlag vor Einsatzbeginn
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Service Area Section -->
+<section class="service-area-section py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="section-title">Unser Einsatzgebiet</h2>
+                <p class="mb-4">Wir sind in ganz Berlin und Umgebung für Sie da. Unser Service umfasst alle Berliner Bezirke sowie angrenzende Gemeinden in Brandenburg.</p>
+                <div class="row g-3">
+                    {% for area in ['Berlin Mitte', 'Berlin Charlottenburg', 'Berlin Kreuzberg', 'Berlin Prenzlauer Berg', 'Potsdam', 'Und weitere...'] %}
+                    <div class="col-6">
+                        <div class="area-item">
+                            <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                            <span>{{ area }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="area-map-wrapper position-relative">
+                    <div id="service-area-map" style="height: 400px; width: 100%; border-radius: 12px; border: 2px solid #dde6f7; box-shadow: 0 5px 15px rgba(0,0,0,0.08); z-index: 1;"></div>
+                    <div class="area-image-badge" style="z-index: 2; pointer-events: none;">
+                        <i class="fas fa-clock me-2"></i>15–30 Min. Reaktionszeit
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+{% if testimonials %}
+<section class="testimonials-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Was unsere Kunden sagen</h2>
+            <p class="section-subtitle">Echte Bewertungen — wir sprechen für sich selbst</p>
+        </div>
+        <div class="row g-4">
+            {% for t in testimonials %}
+            <div class="col-md-6 col-lg-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        {% for i in range(t.rating) %}<i class="fas fa-star"></i>{% endfor %}
+                        {% for i in range(5 - t.rating) %}<i class="far fa-star"></i>{% endfor %}
+                    </div>
+                    <div class="testimonial-text">{{ t.text }}</div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">{{ t.name[0] }}</div>
+                        <div>
+                            <div class="testimonial-name">{{ t.name }}</div>
+                            {% if t.location %}<div class="testimonial-location"><i class="fas fa-map-marker-alt me-1"></i>{{ t.location }}</div>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Callback / CTA Banner -->
+<section class="callback-banner py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="section-title">Wir rufen Sie zurück!</h2>
+                <p style="opacity:.85;font-size:.95rem;">Kein Stress — hinterlassen Sie Ihre Nummer und wir melden uns schnellstmöglich bei Ihnen.</p>
+            </div>
+            <div class="col-lg-6">
+                <div id="quickCallbackForm">
+                    <div class="callback-input-group">
+                        <input type="text" id="quickCbName" placeholder="Ihr Name" autocomplete="name" required>
+                        <input type="tel" id="quickCbPhone" placeholder="Ihre Telefonnummer" autocomplete="tel" required>
+                        <button class="btn-callback" onclick="submitQuickCallback()">
+                            <i class="fas fa-phone-alt me-2"></i>Rückruf anfordern
+                        </button>
+                    </div>
+                    <div id="quickCbError" class="mt-2 text-warning" style="font-size:.85rem;display:none;"></div>
+                </div>
+                <div id="quickCallbackSuccess" class="callback-success">
+                    <i class="fas fa-check-circle me-2"></i>Vielen Dank! Wir melden uns schnellstmöglich.
+                </div>
+                <p style="font-size:.78rem;opacity:.65;margin-top:8px;">
+                    Oder direkt anrufen: <a href="tel:{{ content.phoneNumber or '+4930123456789' }}" style="color:#FFC300;">{{ content.phoneNumber or '+49 30 123 456 789' }}</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section py-5">
+    <div class="container text-center">
+        <h2 class="text-white mb-3">Haben Sie noch Fragen?</h2>
+        <p class="text-white mb-4 opacity-75">Besuchen Sie unsere FAQ-Seite oder kontaktieren Sie uns direkt.</p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="tel:{{ content.phoneNumber or '+4930123456789' }}" class="btn btn-warning btn-lg">
+                <i class="fas fa-phone me-2"></i>{{ content.phoneNumber or '+49 30 123 456 789' }}
+            </a>
+            <a href="{{ url_for('faq') }}" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-question-circle me-2"></i>FAQ ansehen
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Homepage Price Calculator Logic
+(function() {
+    const serviceOpts = document.querySelectorAll('input[name="home-service"]');
+    const zoneOpts    = document.querySelectorAll('input[name="home-zone"]');
+    const timeOpts    = document.querySelectorAll('input[name="home-time"]');
+    const result      = document.getElementById('homeCalcResult');
+    const hint        = document.getElementById('homeCalcHint');
+    const priceEl     = document.getElementById('homeCalcPrice');
+
+    function calculate() {
+        const srv  = document.querySelector('input[name="home-service"]:checked');
+        const zone = document.querySelector('input[name="home-zone"]:checked');
+        const time = document.querySelector('input[name="home-time"]:checked');
+
+        if (!srv || !zone || !time) {
+            result.style.display = 'none';
+            hint.style.display = 'block';
+            return;
+        }
+
+        const base    = parseInt(srv.dataset.base);
+        const maxBase = parseInt(srv.dataset.max);
+        const zoneSur = parseInt(zone.dataset.surcharge);
+        const timeSur = parseInt(time.dataset.surcharge);
+
+        const low  = base    + zoneSur + timeSur;
+        const high = maxBase + zoneSur + timeSur;
+
+        priceEl.textContent = low + ' – ' + high + ' €';
+        result.style.display = 'block';
+        hint.style.display = 'none';
+    }
+
+    [...serviceOpts, ...zoneOpts, ...timeOpts].forEach(el => {
+        el.addEventListener('change', calculate);
+    });
+
+    // Style selected options
+    document.querySelectorAll('.calc-option input').forEach(input => {
+        input.addEventListener('change', function() {
+            document.querySelectorAll(`input[name="${this.name}"]`).forEach(i => {
+                i.closest('.calc-option').classList.remove('selected');
+            });
+            this.closest('.calc-option').classList.add('selected');
+        });
+    });
+})();
+
+// Service Area Map Initialization using Leaflet
+(function() {
+    if (typeof L === 'undefined') return;
+
+    const map = L.map('service-area-map', {
+        center: [52.5200, 13.4050],
+        zoom: 10,
+        scrollWheelZoom: false
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+    }).addTo(map);
+
+    const serviceCircle = L.circle([52.5200, 13.4050], {
+        color: '#0055A4',
+        fillColor: '#0055A4',
+        fillOpacity: 0.12,
+        radius: 22000
+    }).addTo(map);
+    serviceCircle.bindTooltip("Haupt-Einsatzgebiet: 15–30 Min. Wartezeit", {permanent: false, direction: "center"});
+
+    const truckIcon = L.divIcon({
+        html: '<div style="background:#0055A4; color:#fff; border: 2px solid #FFC300; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"><i class="fas fa-truck-pickup"></i></div>',
+        className: 'custom-div-icon',
+        iconSize: [32, 32],
+        iconAnchor: [16, 16]
+    });
+
+    const districts = [
+        { name: "Berlin Mitte", coords: [52.5200, 13.4050], description: "Zentrale Stationierung. Reaktionszeit 15 Min." },
+        { name: "Berlin Charlottenburg", coords: [52.5186, 13.2938], description: "Westliche Stationierung. Reaktionszeit 20 Min." },
+        { name: "Berlin Kreuzberg", coords: [52.4986, 13.4069], description: "Südliche Stationierung. Reaktionszeit 15 Min." },
+        { name: "Berlin Prenzlauer Berg", coords: [52.5398, 13.4285], description: "Östliche Stationierung. Reaktionszeit 15 Min." },
+        { name: "Potsdam / Umland", coords: [52.3906, 13.0645], description: "Umland-Einsatz. Reaktionszeit ca. 30 Min." },
+        { name: "Spandau", coords: [52.5373, 13.2033], description: "Nord-Westliche Stationierung. Reaktionszeit 20 Min." },
+        { name: "Köpenick", coords: [52.4457, 13.5746], description: "Süd-Ostliche Stationierung. Reaktionszeit 25 Min." }
+    ];
+
+    districts.forEach(d => {
+        const marker = L.marker(d.coords, { icon: truckIcon }).addTo(map);
+        marker.bindPopup(`<strong>${d.name}</strong><br>${d.description}<br><a href="tel:{{ content.phoneNumber or '+4930123456789' }}" class="btn btn-warning btn-sm mt-2 text-dark fw-bold w-100"><i class="fas fa-phone-alt me-1"></i> Anrufen</a>`);
+    });
+})();
+
+async function submitQuickCallback() {
+    const name  = document.getElementById('quickCbName').value.trim();
+    const phone = document.getElementById('quickCbPhone').value.trim();
+    const errEl = document.getElementById('quickCbError');
+    if (!name) {
+        errEl.textContent = 'Bitte geben Sie Ihren Namen ein.';
+        errEl.style.display = 'block';
+        return;
+    }
+    if (!phone) {
+        errEl.textContent = 'Bitte geben Sie Ihre Telefonnummer ein.';
+        errEl.style.display = 'block';
+        return;
+    }
+    errEl.style.display = 'none';
+    try {
+        const res = await fetch('/api/callback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, phone })
+        });
+        if (res.ok) {
+            document.getElementById('quickCallbackForm').style.display = 'none';
+            document.getElementById('quickCallbackSuccess').style.display = 'block';
+        } else {
+            errEl.textContent = 'Fehler. Bitte rufen Sie uns direkt an.';
+            errEl.style.display = 'block';
+        }
+    } catch(e) {
+        errEl.textContent = 'Verbindungsfehler. Bitte rufen Sie uns direkt an.';
+        errEl.style.display = 'block';
+    }
+}
+</script>
+{% endblock %}

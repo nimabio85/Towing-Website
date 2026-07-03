@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block title %}Unsere Leistungen - 24h Abschleppdienst Berlin{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="page-title">Unsere Leistungen</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Startseite</a></li>
+                        <li class="breadcrumb-item active">Leistungen</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Detailed Services -->
+<section class="detailed-services py-5">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-12">
+                <div class="service-detail">
+                    <div class="row align-items-center mb-5">
+                        <div class="col-lg-8">
+                            <div class="service-icon-large text-primary mb-3">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <h2>Pannenhilfe</h2>
+                            <p class="lead">Schnelle und professionelle Hilfe bei allen Arten von Autopannen</p>
+                            <div class="service-features">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Motor springt nicht an</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Platter Reifen</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Defekte Kupplung</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Elektronikprobleme</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Kühlsystem defekt</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Getriebeschaden</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="service-image">
+                                <img src="{{ url_for('static', filename='images/breakdown-emergency.jpg') }}"
+                                     alt="Pannenhilfe am Straßenrand"
+                                     class="img-fluid rounded-3 shadow">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-detail">
+                    <div class="row align-items-center mb-5">
+                        <div class="col-lg-4 order-lg-1">
+                            <div class="service-image">
+                                <img src="{{ url_for('static', filename='images/tow-truck-fleet.jpg') }}"
+                                     alt="Unfallbergung mit Abschleppwagen"
+                                     class="img-fluid rounded-3 shadow">
+                            </div>
+                        </div>
+                        <div class="col-lg-8 order-lg-2">
+                            <div class="service-icon-large text-primary mb-3">
+                                <i class="fas fa-car-crash"></i>
+                            </div>
+                            <h2>Unfallbergung</h2>
+                            <p class="lead">Professionelle Bergung und Abtransport nach Verkehrsunfällen</p>
+                            <div class="service-features">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Sofortige Hilfe nach Unfällen</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Sichere Bergung</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Straßenräumung</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Zusammenarbeit mit Versicherungen</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Dokumentation</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Transport zur Werkstatt</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-detail">
+                    <div class="row align-items-center mb-5">
+                        <div class="col-lg-8">
+                            <div class="service-icon-large text-primary mb-3">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <h2>Abschleppdienst</h2>
+                            <p class="lead">Zuverlässiger Transport Ihres Fahrzeugs zu jedem gewünschten Zielort</p>
+                            <div class="service-features">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>PKW und Transporter</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Motorräder</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Oldtimer</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Schonender Transport</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Moderne Abschleppwagen</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Versicherungsschutz</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="service-image">
+                                <img src="{{ url_for('static', filename='images/hero-tow-truck.jpg') }}"
+                                     alt="Abschleppdienst - Fahrzeugtransport"
+                                     class="img-fluid rounded-3 shadow">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-detail">
+                    <div class="row align-items-center mb-5">
+                        <div class="col-lg-4 order-lg-1">
+                            <div class="service-image">
+                                <i class="fas fa-ban display-1 text-danger"></i>
+                            </div>
+                        </div>
+                        <div class="col-lg-8 order-lg-2">
+                            <div class="service-icon-large text-primary mb-3">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <h2>Falschparker entfernen</h2>
+                            <p class="lead">Rechtssichere Entfernung von unberechtigt parkenden Fahrzeugen</p>
+                            <div class="service-features">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Privatparkplätze</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Firmenparkplätze</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Tiefgaragen</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Rechtssichere Dokumentation</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Kostenabrechnung</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Schnelle Abwicklung</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-detail">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <div class="service-icon-large text-primary mb-3">
+                                <i class="fas fa-battery-half"></i>
+                            </div>
+                            <h2>Batterie-Starthilfe</h2>
+                            <p class="lead">Schnelle Starthilfe bei leerer Autobatterie</p>
+                            <div class="service-features">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Professionelle Starthilfegeräte</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Batterietest</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Schnelle Anfahrt</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Alle Fahrzeugtypen</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Sichere Durchführung</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Beratung zum Batteriewechsel</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="service-image">
+                                <i class="fas fa-car-battery display-1 text-warning"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Emergency CTA -->
+<section class="emergency-cta py-5 bg-danger text-white">
+    <div class="container text-center">
+        <h2 class="mb-3"><i class="fas fa-exclamation-triangle me-2"></i>Notfall?</h2>
+        <p class="lead mb-4">Bei akuten Problemen sind wir sofort für Sie da!</p>
+        <a href="tel:{{ content.phoneNumber or '+4930123456789' }}" class="btn btn-warning btn-lg">
+            <i class="fas fa-phone me-2"></i>Notruf: {{ content.phoneNumber or '+49 30 123 456 789' }}
+        </a>
+    </div>
+</section>
+{% endblock %}

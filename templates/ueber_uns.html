@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}Über uns - 24h Abschleppdienst Berlin{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="page-title">Über uns</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Startseite</a></li>
+                        <li class="breadcrumb-item active">Über uns</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="about-section py-5">
+    <div class="container">
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-6">
+                <h2 class="section-title">Ihr zuverlässiger Partner in der Not</h2>
+                <p class="lead">Seit über 15 Jahren sind wir Ihr kompetenter Ansprechpartner für alle Abschlepp- und Pannenhilfe-Dienstleistungen in Berlin und Umgebung.</p>
+                <p>Unser erfahrenes Team steht Ihnen rund um die Uhr zur Verfügung und sorgt dafür, dass Sie schnell und sicher wieder mobil sind. Mit modernster Technik und jahrelanger Erfahrung lösen wir auch schwierige Situationen professionell und zuverlässig.</p>
+                <div class="row mt-4">
+                    <div class="col-sm-6">
+                        <div class="feature-item">
+                            <h4><i class="fas fa-award text-warning me-2"></i>15+ Jahre Erfahrung</h4>
+                            <p>Langjährige Expertise im Abschleppdienst</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="feature-item">
+                            <h4><i class="fas fa-clock text-warning me-2"></i>24/7 Service</h4>
+                            <p>Rund um die Uhr für Sie erreichbar</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-image-wrapper">
+                    {% if content.team_image %}
+                        <img src="{{ url_for('static', filename=content.team_image) }}"
+                             alt="Unser Team - Kfz-Mechaniker und Kunde"
+                             class="img-fluid about-photo">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='images/team-mechanic.jpg') }}"
+                             alt="Unser Team - Kfz-Mechaniker und Kunde"
+                             class="img-fluid about-photo">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section class="team-section py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Unser Team</h2>
+            <p class="section-subtitle">Erfahrene Profis, die Ihnen in jeder Situation helfen</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="team-card text-center">
+                    <div class="team-avatar">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h4>Michael Schmidt</h4>
+                    <p class="text-muted">Geschäftsführer</p>
+                    <p>Leitet das Unternehmen seit der Gründung und bringt über 20 Jahre Erfahrung in der Branche mit.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="team-card text-center">
+                    <div class="team-avatar">
+                        <i class="fas fa-user-cog"></i>
+                    </div>
+                    <h4>Andreas Müller</h4>
+                    <p class="text-muted">Technischer Leiter</p>
+                    <p>Verantwortlich für die Wartung unserer Fahrzeugflotte und technische Innovationen.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="team-card text-center">
+                    <div class="team-avatar">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h4>Sandra Weber</h4>
+                    <p class="text-muted">Disponentin</p>
+                    <p>Koordiniert unsere Einsätze und ist Ihre erste Ansprechpartnerin in der Zentrale.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="why-us-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Warum uns wählen?</h2>
+            <p class="section-subtitle">Das macht uns zu Ihrem besten Partner in der Not</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="advantage-card text-center h-100">
+                    <div class="advantage-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h4>Schnelle Anfahrt</h4>
+                    <p>Durchschnittlich sind wir innerhalb von 20-30 Minuten vor Ort</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="advantage-card text-center h-100">
+                    <div class="advantage-icon">
+                        <i class="fas fa-euro-sign"></i>
+                    </div>
+                    <h4>Faire Preise</h4>
+                    <p>Transparente Kostenstruktur ohne versteckte Gebühren</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="advantage-card text-center h-100">
+                    <div class="advantage-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h4>Moderne Flotte</h4>
+                    <p>Neueste Abschleppwagen und professionelle Ausrüstung</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="advantage-card text-center h-100">
+                    <div class="advantage-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4>Vollversichert</h4>
+                    <p>Umfassender Versicherungsschutz für Ihr Fahrzeug</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Certifications -->
+<section class="certifications-section py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Zertifizierungen & Mitgliedschaften</h2>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="row g-4 text-center">
+                    <div class="col-md-4">
+                        <div class="cert-item">
+                            <i class="fas fa-certificate display-4 text-warning mb-3"></i>
+                            <h5>TÜV Zertifiziert</h5>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="cert-item">
+                            <i class="fas fa-handshake display-4 text-primary mb-3"></i>
+                            <h5>Innungsmeister</h5>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="cert-item">
+                            <i class="fas fa-medal display-4 text-success mb-3"></i>
+                            <h5>IHK Mitglied</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}FAQ - Häufige Fragen | {{ content.companyName or 'Abschleppdienst Berlin' }}{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1 class="page-title">Häufig gestellte Fragen</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Startseite</a></li>
+                <li class="breadcrumb-item active">FAQ</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<section class="faq-section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-5">
+                    <h2 class="section-title">Ihre Fragen — unsere Antworten</h2>
+                    <p class="text-muted">Finden Sie hier Antworten auf die häufigsten Fragen zu unserem Service. Nicht dabei? Rufen Sie uns einfach an.</p>
+                </div>
+
+                {% if faqs %}
+                    <div class="accordion faq-accordion" id="faqAccordion">
+                        {% for faq in faqs %}
+                        <div class="accordion-item faq-item mb-3">
+                            <h2 class="accordion-header" id="faqHead{{ faq.id }}">
+                                <button class="accordion-button {% if not loop.first %}collapsed{% endif %} faq-btn" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#faqBody{{ faq.id }}"
+                                        aria-expanded="{{ 'true' if loop.first else 'false' }}">
+                                    <i class="fas fa-question-circle me-3 text-primary"></i>
+                                    {{ faq.question }}
+                                </button>
+                            </h2>
+                            <div id="faqBody{{ faq.id }}" class="accordion-collapse collapse {% if loop.first %}show{% endif %}"
+                                 data-bs-parent="#faqAccordion">
+                                <div class="accordion-body faq-answer">
+                                    {{ faq.answer }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <i class="fas fa-question-circle fa-3x mb-3"></i>
+                        <p>Noch keine FAQ-Einträge vorhanden. <a href="{{ url_for('kontakt') }}">Kontaktieren Sie uns</a> bei Fragen.</p>
+                    </div>
+                {% endif %}
+
+                <div class="faq-cta mt-5">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="faq-contact-card">
+                                <div class="faq-contact-icon"><i class="fas fa-phone"></i></div>
+                                <div>
+                                    <div class="faq-contact-label">Noch Fragen?</div>
+                                    <a href="tel:{{ content.phoneNumber or '+4930123456789' }}" class="faq-contact-value">
+                                        {{ content.phoneNumber or '+49 30 123 456 789' }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="faq-contact-card">
+                                <div class="faq-contact-icon" style="background:#25d366;"><i class="fab fa-whatsapp"></i></div>
+                                <div>
+                                    <div class="faq-contact-label">WhatsApp</div>
+                                    <a href="https://wa.me/{{ (content.whatsappNumber or '+4930123456789')|replace(' ','')|replace('+','') }}?text=Hallo%2C+ich+habe+eine+Frage%3A+"
+                                       class="faq-contact-value" target="_blank">Nachricht senden</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

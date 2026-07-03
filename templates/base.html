@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}24h Abschleppdienst - Schnell & Zuverlässig{% endblock %}</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <!-- Fixed Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Abschleppdienst Logo" height="40">
+                <span class="brand-text">{{ content.companyName or 'Abschleppdienst' }}</span>
+            </a>
+
+            <!-- Mobile: call + toggle -->
+            <div class="d-lg-none d-flex align-items-center gap-2">
+                <a href="tel:{{ content.phoneNumber or '+4930123456789' }}" class="btn btn-warning btn-sm">
+                    <i class="fas fa-phone"></i>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">Startseite</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('leistungen') }}">Leistungen</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('ueber_uns') }}">Über uns</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('faq') }}">FAQ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('preisrechner') }}">Preisrechner</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('kontakt') }}">Kontakt</a>
+                    </li>
+                    <li class="nav-item d-none d-lg-flex align-items-center ms-2 gap-2">
+                        <!-- Open/Closed badge -->
+                        <span class="hours-badge {{ 'open' if is_open else 'closed' }}">
+                            <span class="dot"></span>
+                            {{ hours_label }}
+                        </span>
+                        <a href="tel:{{ content.phoneNumber or '+4930123456789' }}" class="btn btn-warning">
+                            <i class="fas fa-phone me-1"></i> Jetzt anrufen
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- WhatsApp Floating Button (pre-filled message) -->
+    <div class="whatsapp-float">
+        <a href="https://wa.me/{{ (content.whatsappNumber or '+4930123456789')|replace(' ', '')|replace('+', '') }}?text=Hallo%2C+ich+brauche+Hilfe+mit+meinem+Fahrzeug%3A+" target="_blank" class="whatsapp-button">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <!-- AI Chat Widget -->
+    <div class="chat-widget" id="chatWidget">
+        <button class="chat-toggle-btn" id="chatToggle" aria-label="Chat öffnen">
+            <i class="fas fa-comment-dots chat-open-icon"></i>
+            <i class="fas fa-times chat-close-icon d-none"></i>
+            <span class="chat-badge" id="chatBadge">1</span>
+        </button>
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <div class="chat-avatar"><i class="fas fa-truck"></i></div>
+                    <div>
+                        <div class="chat-name">{{ content.companyName or 'Abschleppdienst' }} Assistent</div>
+                        <div class="chat-status"><span class="status-dot"></span> Online — immer erreichbar</div>
+                    </div>
+                </div>
+                <button class="chat-close-btn" id="chatClose"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-msg bot">
+                    <div class="chat-bubble">
+                        Hallo! 👋 Wie kann ich Ihnen helfen?<br><br>
+                        Fragen Sie mich über <strong>Preise</strong>, <strong>Reaktionszeiten</strong> oder <strong>Leistungen</strong>.
+                    </div>
+                    <div class="chat-time">Jetzt</div>
+                </div>
+            </div>
+            <div class="chat-quick-replies" id="quickReplies">
+                <button class="quick-reply-btn" data-msg="Wie schnell kommen Sie?">⏱️ Reaktionszeit</button>
+                <button class="quick-reply-btn" data-msg="Was kostet ein Abschleppvorgang?">💶 Preise</button>
+                <button class="quick-reply-btn" data-msg="Welche Leistungen bieten Sie an?">🔧 Leistungen</button>
+                <button class="quick-reply-btn" data-msg="Ich habe einen Notfall!">🚨 Notfall</button>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Ihre Frage eingeben..." maxlength="300" autocomplete="off">
+                <button class="chat-send-btn" id="chatSend"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Callback Modal -->
+    <div class="modal fade" id="callbackModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0" style="background:linear-gradient(135deg,#0055A4,#003d7a);color:#fff;border-radius:8px 8px 0 0;">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-phone-alt me-2"></i>Rückruf anfordern</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="text-muted mb-4">Hinterlassen Sie Ihre Nummer — wir rufen Sie schnellstmöglich zurück.</p>
+                    <div id="callbackFormArea">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Ihr Name</label>
+                            <input type="text" class="form-control form-control-lg" id="cbName" placeholder="Max Mustermann">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Telefonnummer <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control form-control-lg" id="cbPhone" placeholder="+49 30 123 456">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Beste Erreichbarkeit (optional)</label>
+                            <select class="form-select form-select-lg" id="cbTime">
+                                <option value="">Egal — so bald wie möglich</option>
+                                <option value="Vormittags (9–12 Uhr)">Vormittags (9–12 Uhr)</option>
+                                <option value="Mittags (12–15 Uhr)">Mittags (12–15 Uhr)</option>
+                                <option value="Nachmittags (15–18 Uhr)">Nachmittags (15–18 Uhr)</option>
+                                <option value="Abends (18–21 Uhr)">Abends (18–21 Uhr)</option>
+                            </select>
+                        </div>
+                        <div id="cbError" class="alert alert-danger d-none"></div>
+                        <button class="btn btn-warning btn-lg w-100 fw-bold" onclick="submitCallback()">
+                            <i class="fas fa-phone me-2"></i>Rückruf anfordern
+                        </button>
+                    </div>
+                    <div id="callbackSuccess" class="text-center py-3 d-none">
+                        <div style="font-size:3rem;">✅</div>
+                        <h5 class="mt-3 fw-bold text-success">Vielen Dank!</h5>
+                        <p class="text-muted">Wir rufen Sie schnellstmöglich zurück.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer bg-dark text-light py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="text-warning">Kontakt</h5>
+                    <div class="footer-contact-info">
+                        <p><i class="fas fa-map-marker-alt me-2"></i>{{ (content.address or 'Musterstraße 123\n12345 Berlin')|replace('\n', '<br>')|safe }}</p>
+                        <p><i class="fas fa-phone me-2"></i><a href="tel:{{ content.phoneNumber or '+4930123456789' }}" class="text-light">{{ content.phoneNumber or '+49 30 123 456 789' }}</a></p>
+                        <p><i class="fas fa-envelope me-2"></i><a href="mailto:{{ content.email or 'info@abschleppdienst-berlin.de' }}" class="text-light">{{ content.email or 'info@abschleppdienst-berlin.de' }}</a></p>
+                        <p>
+                            <a href="https://wa.me/{{ (content.whatsappNumber or '+4930123456789')|replace(' ','')|replace('+','') }}?text=Hallo%2C+ich+brauche+Hilfe+mit+meinem+Fahrzeug%3A+"
+                               class="btn btn-success btn-sm mt-1" target="_blank">
+                                <i class="fab fa-whatsapp me-1"></i>WhatsApp schreiben
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5 class="text-warning">Öffnungszeiten</h5>
+                    <p class="mb-1"><strong>24 Stunden täglich</strong></p>
+                    <p class="mb-1">365 Tage im Jahr</p>
+                    <p class="text-warning"><strong>Notdienst verfügbar</strong></p>
+                    <div class="mt-2">
+                        <span class="hours-badge {{ 'open' if is_open else 'closed' }}">
+                            <span class="dot"></span> {{ hours_label }}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5 class="text-warning">Nützliche Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('faq') }}" class="text-light text-decoration-none"><i class="fas fa-question-circle me-2 text-warning"></i>FAQ</a></li>
+                        <li><a href="{{ url_for('preisrechner') }}" class="text-light text-decoration-none"><i class="fas fa-calculator me-2 text-warning"></i>Preisrechner</a></li>
+                        <li><a href="{{ url_for('leistungen') }}" class="text-light text-decoration-none"><i class="fas fa-tools me-2 text-warning"></i>Leistungen</a></li>
+                        <li><a href="{{ url_for('kontakt') }}" class="text-light text-decoration-none"><i class="fas fa-envelope me-2 text-warning"></i>Kontakt</a></li>
+                    </ul>
+                    <button class="btn btn-outline-warning btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#callbackModal">
+                        <i class="fas fa-phone-alt me-1"></i>Rückruf anfordern
+                    </button>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2025 {{ content.companyName or 'Abschleppdienst Berlin' }}. Alle Rechte vorbehalten.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="{{ url_for('impressum') }}" class="text-light me-3">Impressum</a>
+                    <a href="{{ url_for('datenschutz') }}" class="text-light">Datenschutz</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- DSGVO Cookie Consent Banner -->
+    <div class="cookie-banner flex-column align-items-stretch" id="cookieBanner" style="display:none; max-width: 480px; left: auto; right: 20px; bottom: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(26, 26, 46, 0.95); backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.25);">
+        <div class="mb-3">
+            <h6 class="text-warning fw-bold mb-2"><i class="fas fa-cookie-bite me-2"></i>Cookie-Einstellungen</h6>
+            <p class="mb-2" style="font-size: 0.82rem; line-height: 1.4; color: #ccc;">
+                Wir verwenden Cookies, um Ihnen ein optimales Webseiten-Erlebnis zu bieten. Dazu zählen Cookies, die für den Betrieb der Seite notwendig sind, sowie solche, die lediglich zu anonymen Statistikzwecken oder für Marketing verwendet werden. Weitere Infos in unserer <a href="{{ url_for('datenschutz') }}" target="_blank">Datenschutzerklärung</a>.
+            </p>
+        </div>
+        
+        <!-- Preferences (Checkboxes) -->
+        <div class="mb-3 d-flex gap-3 justify-content-start flex-wrap bg-dark bg-opacity-25 p-2 rounded" style="font-size: 0.8rem;">
+            <div class="form-check m-0">
+                <input class="form-check-input" type="checkbox" id="cookieEssential" checked disabled>
+                <label class="form-check-label fw-bold text-white" for="cookieEssential">Notwendig</label>
+            </div>
+            <div class="form-check m-0">
+                <input class="form-check-input" type="checkbox" id="cookieAnalytics">
+                <label class="form-check-label text-light" for="cookieAnalytics">Statistiken</label>
+            </div>
+            <div class="form-check m-0">
+                <input class="form-check-input" type="checkbox" id="cookieMarketing">
+                <label class="form-check-label text-light" for="cookieMarketing">Marketing</label>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap">
+            <button class="btn btn-outline-light btn-sm btn-cookie-decline border-secondary flex-grow-1" style="font-size: 0.78rem;" onclick="saveSelectedCookies()">Auswahl speichern</button>
+            <button class="btn btn-cookie-decline btn-sm text-secondary flex-grow-1" style="font-size: 0.78rem; border: none;" onclick="rejectAllCookies()">Nur essenzielle</button>
+            <button class="btn btn-warning btn-sm btn-cookie-accept fw-bold text-dark flex-grow-1" style="font-size: 0.78rem;" onclick="acceptAllCookies()">Alle akzeptieren</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <script>
+    // Cookie Banner
+    (function() {
+        if (!localStorage.getItem('cookieConsent')) {
+            document.getElementById('cookieBanner').style.display = 'flex';
+        }
+    })();
+    function acceptAllCookies() {
+        const consent = { essential: true, analytics: true, marketing: true };
+        localStorage.setItem('cookieConsent', JSON.stringify(consent));
+        document.getElementById('cookieBanner').style.display = 'none';
+    }
+    function rejectAllCookies() {
+        const consent = { essential: true, analytics: false, marketing: false };
+        localStorage.setItem('cookieConsent', JSON.stringify(consent));
+        document.getElementById('cookieBanner').style.display = 'none';
+    }
+    function saveSelectedCookies() {
+        const analytics = document.getElementById('cookieAnalytics').checked;
+        const marketing = document.getElementById('cookieMarketing').checked;
+        const consent = { essential: true, analytics: analytics, marketing: marketing };
+        localStorage.setItem('cookieConsent', JSON.stringify(consent));
+        document.getElementById('cookieBanner').style.display = 'none';
+    }
+
+    // Callback form submission
+    async function submitCallback() {
+        const name  = document.getElementById('cbName').value.trim();
+        const phone = document.getElementById('cbPhone').value.trim();
+        const time  = document.getElementById('cbTime').value;
+        const errEl = document.getElementById('cbError');
+
+        if (!phone) {
+            errEl.textContent = 'Bitte geben Sie Ihre Telefonnummer ein.';
+            errEl.classList.remove('d-none');
+            return;
+        }
+        errEl.classList.add('d-none');
+
+        try {
+            const res = await fetch('/api/callback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, phone, best_time: time })
+            });
+            if (res.ok) {
+                document.getElementById('callbackFormArea').classList.add('d-none');
+                document.getElementById('callbackSuccess').classList.remove('d-none');
+            } else {
+                errEl.textContent = 'Fehler beim Senden. Bitte rufen Sie uns direkt an.';
+                errEl.classList.remove('d-none');
+            }
+        } catch(e) {
+            errEl.textContent = 'Verbindungsfehler. Bitte rufen Sie uns direkt an.';
+            errEl.classList.remove('d-none');
+        }
+    }
+
+    // Reset modal on close
+    document.getElementById('callbackModal').addEventListener('hidden.bs.modal', function() {
+        document.getElementById('callbackFormArea').classList.remove('d-none');
+        document.getElementById('callbackSuccess').classList.add('d-none');
+        document.getElementById('cbName').value = '';
+        document.getElementById('cbPhone').value = '';
+        document.getElementById('cbTime').value = '';
+        document.getElementById('cbError').classList.add('d-none');
+    });
+    </script>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

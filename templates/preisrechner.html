@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block title %}Preisrechner | {{ content.companyName or 'Abschleppdienst Berlin' }}{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1 class="page-title">Preisrechner</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Startseite</a></li>
+                <li class="breadcrumb-item active">Preisrechner</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<section class="calculator-section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-5">
+                    <h2 class="section-title">Preisschätzung berechnen</h2>
+                    <p class="text-muted">Erhalten Sie eine unverbindliche Kosteneinschätzung für Ihren Einsatz. Der genaue Preis wird nach der Besichtigung mitgeteilt.</p>
+                </div>
+
+                <div class="calc-card">
+                    <div class="calc-step mb-4">
+                        <div class="calc-step-label"><span class="calc-step-num">1</span> Welche Leistung benötigen Sie?</div>
+                        <div class="calc-options" id="serviceOptions">
+                            <label class="calc-option">
+                                <input type="radio" name="service" value="starthilfe" data-base="60" data-max="90">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-battery-half"></i>
+                                    <span>Starthilfe</span>
+                                </div>
+                            </label>
+                            <label class="calc-option">
+                                <input type="radio" name="service" value="pannenhilfe" data-base="80" data-max="130">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-tools"></i>
+                                    <span>Pannenhilfe</span>
+                                </div>
+                            </label>
+                            <label class="calc-option">
+                                <input type="radio" name="service" value="oeffnen" data-base="80" data-max="150">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-key"></i>
+                                    <span>Fahrzeug öffnen</span>
+                                </div>
+                            </label>
+                            <label class="calc-option">
+                                <input type="radio" name="service" value="abschleppen" data-base="110" data-max="180">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-truck"></i>
+                                    <span>Abschleppen</span>
+                                </div>
+                            </label>
+                            <label class="calc-option">
+                                <input type="radio" name="service" value="unfallbergung" data-base="160" data-max="320">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-car-crash"></i>
+                                    <span>Unfallbergung</span>
+                                </div>
+                            </label>
+                            <label class="calc-option">
+                                <input type="radio" name="service" value="falschparker" data-base="120" data-max="200">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-car"></i>
+                                    <span>Falschparker</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="calc-step mb-4">
+                        <div class="calc-step-label"><span class="calc-step-num">2</span> Ihr Standort</div>
+                        <div class="calc-options" id="zoneOptions">
+                            <label class="calc-option">
+                                <input type="radio" name="zone" value="innen" data-surcharge="0">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-building"></i>
+                                    <span>Innenstadt</span>
+                                    <small>Mitte, Prenzlauer Berg, Kreuzberg…</small>
+                                </div>
+                            </label>
+                            <label class="calc-option">
+                                <input type="radio" name="zone" value="aussen" data-surcharge="25">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-map-marked-alt"></i>
+                                    <span>Außenbezirke</span>
+                                    <small>Spandau, Reinickendorf, Steglitz…</small>
+                                </div>
+                            </label>
+                            <label class="calc-option">
+                                <input type="radio" name="zone" value="umland" data-surcharge="50">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-road"></i>
+                                    <span>Umland / Brandenburg</span>
+                                    <small>Potsdam, Oranienburg, Strausberg…</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="calc-step mb-4">
+                        <div class="calc-step-label"><span class="calc-step-num">3</span> Uhrzeit</div>
+                        <div class="calc-options" id="timeOptions">
+                            <label class="calc-option">
+                                <input type="radio" name="time" value="day" data-surcharge="0">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-sun"></i>
+                                    <span>Tagsüber</span>
+                                    <small>06:00 – 22:00 Uhr</small>
+                                </div>
+                            </label>
+                            <label class="calc-option">
+                                <input type="radio" name="time" value="night" data-surcharge="20">
+                                <div class="calc-option-inner">
+                                    <i class="fas fa-moon"></i>
+                                    <span>Nachts / Wochenende</span>
+                                    <small>22:00 – 06:00, Sa/So/Feiertag</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Result -->
+                    <div class="calc-result" id="calcResult" style="display:none;">
+                        <div class="calc-result-inner">
+                            <div class="calc-result-label">Geschätzter Preis</div>
+                            <div class="calc-result-price" id="calcPrice">—</div>
+                            <div class="calc-result-note">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Unverbindliche Schätzung. Der genaue Preis wird vor Ort festgelegt.
+                            </div>
+                            <div class="mt-3 d-flex gap-2 justify-content-center flex-wrap">
+                                <a href="tel:{{ content.phoneNumber or '+4930123456789' }}" class="btn btn-warning btn-lg">
+                                    <i class="fas fa-phone me-2"></i>Jetzt anrufen
+                                </a>
+                                <button class="btn btn-outline-primary btn-lg" data-bs-toggle="modal" data-bs-target="#callbackModal">
+                                    <i class="fas fa-phone-alt me-2"></i>Rückruf anfordern
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="calcHint" class="calc-hint">
+                        <i class="fas fa-arrow-up me-2"></i>Wählen Sie bitte alle drei Optionen oben aus.
+                    </div>
+                </div>
+
+                <div class="calc-info-row mt-4">
+                    <div class="calc-info-item">
+                        <i class="fas fa-check-circle text-success"></i>
+                        Keine Anfahrtskosten im Stadtgebiet
+                    </div>
+                    <div class="calc-info-item">
+                        <i class="fas fa-check-circle text-success"></i>
+                        Faire Preise — keine versteckten Gebühren
+                    </div>
+                    <div class="calc-info-item">
+                        <i class="fas fa-check-circle text-success"></i>
+                        Kostenvoranschlag vor Einsatzbeginn
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% block scripts %}
+<script>
+(function() {
+    const serviceOpts = document.querySelectorAll('input[name="service"]');
+    const zoneOpts    = document.querySelectorAll('input[name="zone"]');
+    const timeOpts    = document.querySelectorAll('input[name="time"]');
+    const result      = document.getElementById('calcResult');
+    const hint        = document.getElementById('calcHint');
+    const priceEl     = document.getElementById('calcPrice');
+
+    function calculate() {
+        const srv  = document.querySelector('input[name="service"]:checked');
+        const zone = document.querySelector('input[name="zone"]:checked');
+        const time = document.querySelector('input[name="time"]:checked');
+
+        if (!srv || !zone || !time) {
+            result.style.display = 'none';
+            hint.style.display = 'block';
+            return;
+        }
+
+        const base    = parseInt(srv.dataset.base);
+        const maxBase = parseInt(srv.dataset.max);
+        const zoneSur = parseInt(zone.dataset.surcharge);
+        const timeSur = parseInt(time.dataset.surcharge);
+
+        const low  = base    + zoneSur + timeSur;
+        const high = maxBase + zoneSur + timeSur;
+
+        priceEl.textContent = low + ' – ' + high + ' €';
+        result.style.display = 'block';
+        hint.style.display = 'none';
+        result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    [...serviceOpts, ...zoneOpts, ...timeOpts].forEach(el => {
+        el.addEventListener('change', calculate);
+    });
+
+    // Style selected options
+    document.querySelectorAll('.calc-option input').forEach(input => {
+        input.addEventListener('change', function() {
+            document.querySelectorAll(`input[name="${this.name}"]`).forEach(i => {
+                i.closest('.calc-option').classList.remove('selected');
+            });
+            this.closest('.calc-option').classList.add('selected');
+        });
+    });
+})();
+</script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block title %}Kontakt - 24h Abschleppdienst Berlin{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="page-title">Kontakt</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Startseite</a></li>
+                        <li class="breadcrumb-item active">Kontakt</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-section py-5">
+    <div class="container">
+        <div class="row g-5">
+            <!-- Contact Form -->
+            <div class="col-lg-8">
+                <div class="contact-form-wrapper">
+                    <h2 class="mb-2">Nachricht senden</h2>
+                    <p class="text-muted mb-4">Haben Sie Fragen oder benötigen Sie einen Kostenvoranschlag? Kontaktieren Sie uns — wir melden uns schnellstmöglich bei Ihnen.</p>
+
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show mb-4" role="alert">
+                                    <i class="fas fa-{{ 'exclamation-circle' if category == 'error' else 'check-circle' }} me-2"></i>{{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form method="POST" class="contact-form" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="name" class="form-label fw-semibold">Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-lg" id="name" name="name" placeholder="Ihr vollständiger Name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label fw-semibold">Telefon</label>
+                                <input type="tel" class="form-control form-control-lg" id="phone" name="phone" placeholder="z.B. +49 30 123 456">
+                            </div>
+                            <div class="col-12">
+                                <label for="email" class="form-label fw-semibold">E-Mail <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control form-control-lg" id="email" name="email" placeholder="ihre@email.de" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="subject" class="form-label fw-semibold">Betreff</label>
+                                <select class="form-select form-select-lg" id="subject" name="subject">
+                                    <option value="">Bitte wählen...</option>
+                                    <option value="pannenhilfe">Pannenhilfe</option>
+                                    <option value="abschleppdienst">Abschleppdienst</option>
+                                    <option value="unfallbergung">Unfallbergung</option>
+                                    <option value="falschparker">Falschparker entfernen</option>
+                                    <option value="kostenvoranschlag">Kostenvoranschlag</option>
+                                    <option value="sonstiges">Sonstiges</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label for="message" class="form-label fw-semibold">Nachricht <span class="text-danger">*</span></label>
+                                <textarea class="form-control form-control-lg" id="message" name="message" rows="6" placeholder="Beschreiben Sie Ihr Anliegen..." required></textarea>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="privacy" name="privacy" required>
+                                    <label class="form-check-label text-muted" for="privacy">
+                                        Ich habe die <a href="{{ url_for('datenschutz') }}" target="_blank">Datenschutzerklärung</a> gelesen und akzeptiert. <span class="text-danger">*</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary btn-lg px-5">
+                                    <i class="fas fa-paper-plane me-2"></i>Nachricht senden
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Contact Info Sidebar -->
+            <div class="col-lg-4">
+                <div class="contact-info-wrapper">
+                    <!-- Emergency Card -->
+                    <div class="emergency-contact mb-4">
+                        <div class="card bg-danger text-white border-0 shadow-lg">
+                            <div class="card-body text-center py-4">
+                                <div class="mb-2" style="font-size:2.5rem;">🚨</div>
+                                <h4 class="fw-bold mb-1">Notfall?</h4>
+                                <p class="mb-3 opacity-75">Sofort anrufen — 24/7!</p>
+                                <a href="tel:{{ content.phoneNumber or '+4930123456789' }}" class="btn btn-warning btn-lg w-100 fw-bold">
+                                    <i class="fas fa-phone me-2"></i>{{ content.phoneNumber or '+49 30 123 456 789' }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Details -->
+                    <div class="contact-info">
+                        <h3 class="mb-4 fw-bold">Kontaktinformationen</h3>
+
+                        <div class="contact-item mb-4">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h5>Adresse</h5>
+                                <p class="mb-0">{{ (content.address or 'Musterstraße 123\n12345 Berlin')|replace('\n','<br>')|safe }}</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item mb-4">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h5>Telefon</h5>
+                                <p class="mb-0"><a href="tel:{{ content.phoneNumber or '+4930123456789' }}">{{ content.phoneNumber or '+49 30 123 456 789' }}</a></p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item mb-4">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h5>E-Mail</h5>
+                                <p class="mb-0"><a href="mailto:{{ content.email or 'info@abschleppdienst-berlin.de' }}">{{ content.email or 'info@abschleppdienst-berlin.de' }}</a></p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item mb-4">
+                            <div class="contact-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h5>Erreichbarkeit</h5>
+                                <p class="mb-0"><strong>24 Stunden täglich</strong><br>365 Tage im Jahr</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-top">
+                            <h6 class="mb-3 text-muted">Auch erreichbar via:</h6>
+                            <div class="d-flex gap-2">
+                                <a href="https://wa.me/{{ (content.whatsappNumber or '+4930123456789')|replace(' ','')|replace('+','') }}" class="btn btn-success flex-fill" target="_blank">
+                                    <i class="fab fa-whatsapp me-1"></i>WhatsApp
+                                </a>
+                                <a href="mailto:{{ content.email or 'info@abschleppdienst-berlin.de' }}" class="btn btn-outline-primary flex-fill">
+                                    <i class="fas fa-envelope me-1"></i>E-Mail
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map Section -->
+<section class="map-section py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="section-title">So finden Sie uns</h2>
+            <p class="text-muted">{{ (content.address or 'Musterstraße 123, 12345 Berlin')|replace('\n', ', ') }}</p>
+        </div>
+        <div class="map-embed-wrapper shadow rounded-3 overflow-hidden">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d155399.41922908938!2d13.28832823281249!3d52.50702969999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a84e373f035901%3A0x42120465b5e3b70!2sBerlin!5e0!3m2!1sde!2sde!4v1700000000000!5m2!1sde!2sde"
+                width="100%"
+                height="420"
+                style="border:0; display:block;"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="Standort Berlin">
+            </iframe>
+        </div>
+        <div class="row g-3 mt-4 text-center">
+            <div class="col-md-4">
+                <div class="map-info-card">
+                    <i class="fas fa-car text-primary mb-2 fs-4"></i>
+                    <p class="mb-0 fw-semibold">Parkplatz vorhanden</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="map-info-card">
+                    <i class="fas fa-subway text-primary mb-2 fs-4"></i>
+                    <p class="mb-0 fw-semibold">Gut mit ÖPNV erreichbar</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="map-info-card">
+                    <i class="fas fa-clock text-primary mb-2 fs-4"></i>
+                    <p class="mb-0 fw-semibold">24/7 geöffnet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
