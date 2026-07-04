@@ -130,9 +130,7 @@ towinghero/
 - The Leaflet.js map renders service station markers and the primary response zone using CartoDB Positron tiles — no external API key required.
 - The DSGVO cookie banner gates analytics/marketing scripts client-side until consent is given.
 
-## 📄 License
-
-No license file is currently included in this repository.
+## 📄 [License](https://github.com/nimabio85/Towing-Website/commit/5f0f222f2d062519e7fc6356ae7893888afaf48e)
 
 ## 🙏 Acknowledgements
 
